@@ -54,6 +54,34 @@ def assign_final_bucket(row):
     else:
         return "Uncategorized"
 
+def assign_confident_bucket(row):
+    name = str(row['product_name']) if pd.notnull(row['product_name']) else ''
+    desc = str(row['description']) if pd.notnull(row['description']) else ''
+    cat = str(row['product_category_tree']) if pd.notnull(row['product_category_tree']) else ''
+    text = f"{name} {desc} {cat}".lower()
+
+    # Strict match for tech
+    if 'electronics' in cat and ('bluetooth' in text or 'headphones' in text) and row['retail_price'] > 1000:
+        return 'Tech & Gadgets'
+
+    # Strict match for fashion
+    if 'apparel' in cat and any(kw in text for kw in ['kurta', 'saree', 'style code']):
+        return 'Fashion'
+
+    # Strict match for home
+    if 'decor' in cat or any(kw in text for kw in ['cushion', 'curtain', 'lamp']):
+        return 'Home & Decor'
+
+    # Budget: price + weak language
+    if row['retail_price'] < 500 and 'affordable' in text:
+        return 'Budget Essentials'
+
+    return 'Uncertain'
+
+df['confident_bucket'] = df.apply(assign_confident_bucket, axis=1)
+labeled_df = df[df['confident_bucket'] != 'Uncertain']
+labeled_df.to_csv('./data/flipkart_labeled_seed.csv', index=False)
+
 df['final_bucket'] = df.apply(assign_final_bucket, axis=1)
 
 # === Step 5: Save labeled dataset ===
