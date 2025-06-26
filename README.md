@@ -1,8 +1,11 @@
 # Product_Metadata
 
 ## Bucket Definitions: 
-### Fashion
-Includes clothing, jewelry, and ethnic wear. It appeals to users that value aesthetics, trends, and cultural expression.
+### Clothing
+Includes clothing and ethnic wear. It appeals to users that value aesthetics, trends, and cultural expression.
+
+### Jewelry 
+Includes jewelry. It appeals to users that value aesthetics, trends, and cultural expression.
 
 ### Budget
 Includes products < 500 rupees or have > 60% discount. It appeals to cost-conscious or mass-market users.
